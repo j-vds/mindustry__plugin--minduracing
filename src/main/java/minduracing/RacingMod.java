@@ -18,13 +18,12 @@ import mindustry.world.blocks.*;
 import mindustry.world.blocks.BuildBlock.*;
 
 import static arc.util.Log.info;
-import static bomberman.Bomberman.*;
 import static mindustry.Vars.*;
 
-public class BombermanMod extends Plugin{
+public class RacingMod extends Plugin{
     private final Rules rules = new Rules();
 
-    private BombermanGenerator generator;
+    private RacingMod generator;
 
 
     @Override
@@ -261,7 +260,7 @@ public class BombermanMod extends Plugin{
         handler.register("bomberman", "Begin hosting with the Bomberman gamemode.", args -> {
             logic.reset();
             Log.info("Generating map...");
-            world.loadGenerator(generator = new BombermanGenerator());
+            world.loadGenerator(generator = new CourseGenerator());
             info("Map generated.");
             state.rules = rules.copy();
             logic.play();
@@ -273,9 +272,4 @@ public class BombermanMod extends Plugin{
         return state.rules.tags.getBool("bomberman") && !state.is(State.menu);
     }
 
-    private void setLocationPosition(Player p, Position pos){
-        Call.onPositionSet(p.con, pos.getX(), pos.getY());
-        p.setNet(pos.getX(), pos.getY());
-        p.set(pos.getX(), pos.getY());
-    }
 }
