@@ -17,7 +17,7 @@ public class CourseGenerator extends Generator {
 
 
     CourseGenerator() {
-        super(width, height);
+        super(size, size);
     }
 
     @Override
@@ -31,7 +31,16 @@ public class CourseGenerator extends Generator {
             }
         }
 
-
         world.setMap(new Map(StringMap.of("name", mapname)));
+    }
+
+
+    public void buildWP(Tile[][] tiles, int x, int y){
+        Waypoints[] wps = Waypoints.values();
+        for(int dx = 0; x < 2; dx++){
+            for(int dy = 0; y < 2; dy++){
+                tiles[x + dx][y + dy].setBlock(wps[2 * dx + dy].wall, wps[2 * dx + dy].team);
+            }
+        }
     }
 }

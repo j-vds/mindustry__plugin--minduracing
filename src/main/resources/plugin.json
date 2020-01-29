@@ -1,6 +1,7 @@
 {
   "name": "MinduRacing",
   "author": "Fishbuilder",
+  "main": "minduracing.RacingMod",
   "description": "don't touch the brakes",
   "version": 0.0
 }
