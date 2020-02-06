@@ -1,11 +1,28 @@
 package minduracing.TrackParts;
 
+import java.util.function.DoubleUnaryOperator;
+
 import static minduracing.MinduRacing.*;
 
-public class Corner {
+public class Corner extends TrackPart{
     public static float innerRadius = 20f;
     public static float outerRadius = innerRadius + gap;
+    private static float edgeGap = 1f;
 
+    public int pcase;
+    public float IR;
+    public float OR;
+
+    public Corner(int topx, int topy, int pcase){
+        this(topx, topy, pcase, innerRadius, outerRadius);
+    }
+
+    public Corner(int topx, int topy, int pcase, float IR, float OR){
+        super(topx, topy);
+        this.pcase = pcase;
+        this.IR = IR;
+        this.OR = OR;
+    }
 
     public static boolean cornerTop(int x, int y, int topx, int topy, int pcase){
         return cornerTop(x, y, topx, topy, pcase, innerRadius, outerRadius);
@@ -47,7 +64,7 @@ public class Corner {
                 return false;
         }
 
-        if (inCircle(OR, mx, my, x, y) && !inCircle(IR, mx, my, x, y)){
+        if (inCircle(OR-edgeGap, mx, my, x, y) && !inCircle(IR, mx, my, x, y)){
             return true;
         } else {
             return false;

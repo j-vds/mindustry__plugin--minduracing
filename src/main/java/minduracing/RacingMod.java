@@ -38,9 +38,9 @@ public class RacingMod extends Plugin{
         //if game is already running -> spectator mode
         Events.on(PlayerJoin.class, event -> {
             event.player.dead = false;
-            event.player.mech = Mechs.tau;
+            event.player.mech = Mechs.glaive;
 
-            setPlayerOnTile(event.player, generator.getSpawns()[0], generator.getSpawns()[1]);
+            setPlayerOnTile(event.player, generator.getSpawn()[0], generator.getSpawn()[1]);
 
         });
 

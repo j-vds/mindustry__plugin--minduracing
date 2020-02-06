@@ -5,6 +5,7 @@ import arc.struct.*;
 import arc.util.*;
 import minduracing.TrackParts.Corner;
 import minduracing.TrackParts.Straight;
+import minduracing.TrackParts.TrackPart;
 import mindustry.content.Blocks;
 import mindustry.gen.Call;
 import mindustry.maps.*;
@@ -19,6 +20,7 @@ import static minduracing.MinduRacing.*;
 public class CourseGenerator extends Generator {
     public Pallete pallete =  Pallete.cavern;
     public int[][] checkpoints;
+    private Array<TrackPart> parts = new Array<>();
 
 
     CourseGenerator() {
@@ -56,6 +58,10 @@ public class CourseGenerator extends Generator {
             }
         }
 
+        //populate checkpoints for now ~ mittle of a part + star
+        //iterate track parts
+
+
         world.setMap(new Map(StringMap.of("name", mapname)));
     }
 
@@ -69,7 +75,7 @@ public class CourseGenerator extends Generator {
         }
     }
 
-    public int[] getSpawns(){
+    public int[] getSpawn(){
         int[] spawns = {5, (int)Math.floor(height/2)};
         return spawns;
     }
