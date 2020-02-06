@@ -24,12 +24,14 @@ public class Corner extends TrackPart{
         this.OR = OR;
     }
 
-    public static boolean cornerTop(int x, int y, int topx, int topy, int pcase){
-        return cornerTop(x, y, topx, topy, pcase, innerRadius, outerRadius);
+    public boolean erase(){}
+
+    private static boolean cornerSW(int x, int y, int topx, int topy, int pcase){
+        return cornerSW(x, y, topx, topy, pcase, innerRadius, outerRadius);
     }
     /* True == blank */
     //topx en topy zijn coordinaten van de links onderhoek
-    public static boolean cornerTop(int x, int y, int topx, int topy, int pcase, float IR, float OR){
+    private static boolean cornerSW(int x, int y, int topx, int topy, int pcase, float IR, float OR){
         float mx, my;
         switch (pcase){
             //   ---
