@@ -3,6 +3,10 @@ package minduracing;
 import arc.math.*;
 import arc.struct.*;
 import arc.util.*;
+import minduracing.TrackParts.Corner;
+import minduracing.TrackParts.Straight;
+import mindustry.content.Blocks;
+import mindustry.gen.Call;
 import mindustry.maps.*;
 import mindustry.maps.generators.*;
 import mindustry.world.*;
@@ -14,10 +18,12 @@ import static minduracing.MinduRacing.*;
 // class that generates the map
 public class CourseGenerator extends Generator {
     public Pallete pallete =  Pallete.cavern;
+    public int[][] checkpoints;
 
 
     CourseGenerator() {
-        super(size, size);
+        //size depends on map ofc
+        super(2*size, size);
     }
 
     @Override
@@ -27,7 +33,26 @@ public class CourseGenerator extends Generator {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 tiles[x][y] = new Tile(x, y);
-                tiles[x][y].setFloor(pallete.floor);
+                if (0 <= x && x <= 10 && Math.abs(y - height/2) < 2){
+                    tiles[x][y].setFloor(pallete.finish);
+                } else {
+                    tiles[x][y].setFloor(pallete.floor);
+                }
+                //make all blocks WALL
+                tiles[x][y].setBlock(pallete.wall, dead);
+            }
+        }
+
+        for (int x = 0; x < width; x++){
+            for (int y = 0; y < height; y++){
+                if (Corner.cornerTop(x, y, 0, 0, 4)) tiles[x][y].setBlock(Blocks.air);
+                if (Corner.cornerTop(x, y, 0, height/2, 1)) tiles[x][y].setBlock(Blocks.air);
+                //straights
+                if (Straight.horiz(x, y, (int)Math.floor(Corner.outerRadius), 0, width - 2*Corner.outerRadius)) tiles[x][y].setBlock(Blocks.air);
+                if (Straight.horiz(x, y, (int)Math.floor(Corner.outerRadius), height-gap, width - 2*Corner.outerRadius)) tiles[x][y].setBlock(Blocks.air);
+
+                if (Corner.cornerTop(x, y, (int)Math.floor(width - Corner.outerRadius), height/2, 2)) tiles[x][y].setBlock(Blocks.air);
+                if (Corner.cornerTop(x, y, (int)Math.floor(width - Corner.outerRadius), 0, 3)) tiles[x][y].setBlock(Blocks.air);
             }
         }
 
@@ -37,10 +62,15 @@ public class CourseGenerator extends Generator {
 
     public void buildWP(Tile[][] tiles, int x, int y){
         Waypoints[] wps = Waypoints.values();
-        for(int dx = 0; x < 2; dx++){
-            for(int dy = 0; y < 2; dy++){
-                tiles[x + dx][y + dy].setBlock(wps[2 * dx + dy].wall, wps[2 * dx + dy].team);
+        for(int dx = 0; dx < 2; dx++){
+            for(int dy = 0; dy < 2; dy++){
+                Call.onConstructFinish(world.tile(x + dx,y + dy), wps[2*dx+dy].wall, player.id, (byte)0, dead, true);
             }
         }
+    }
+
+    public int[] getSpawns(){
+        int[] spawns = {5, (int)Math.floor(height/2)};
+        return spawns;
     }
 }

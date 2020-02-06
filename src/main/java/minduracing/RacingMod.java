@@ -4,12 +4,16 @@ import arc.*;
 import arc.util.*;
 
 import mindustry.Vars;
+import mindustry.content.Blocks;
+import mindustry.content.Mechs;
+import mindustry.content.StatusEffects;
 import mindustry.core.GameState.*;
 import mindustry.entities.type.Player;
 import mindustry.game.EventType.*;
 import mindustry.game.*;
 import mindustry.gen.Call;
 import mindustry.plugin.*;
+import mindustry.world.Block;
 import mindustry.world.Tile;
 
 import static arc.util.Log.info;
@@ -33,12 +37,29 @@ public class RacingMod extends Plugin{
         //Todo: check for min 2 players and have a countdown (~ 10 seconds)
         //if game is already running -> spectator mode
         Events.on(PlayerJoin.class, event -> {
+            event.player.dead = false;
+            event.player.mech = Mechs.tau;
+
+            setPlayerOnTile(event.player, generator.getSpawns()[0], generator.getSpawns()[1]);
 
         });
 
 
         Events.on(Trigger.update, () -> {
             if(!active()) return;
+
+            for (Player p: playerGroup.all()){
+                //if (p.getTeam() == dead) continue;
+                if (p.isFlying()){
+                    if (p.tileOn() == null) {
+                        //apply slow effect
+                        p.applyEffect(StatusEffects.freezing, 60f);
+                    } else if (p.tileOn().block() == generator.pallete.wall){
+                        //apply slow effect
+                        p.applyEffect(StatusEffects.freezing, 60f);
+                    }
+                }
+            }
         });
 
 
@@ -64,7 +85,7 @@ public class RacingMod extends Plugin{
         handler.<Player>register("wp", "<x> <y>", "place a wp", (args, player) -> {
             int x = Integer.parseInt(args[0]);
             int y = Integer.parseInt(args[1]);
-            buildWP(x, y, player);
+            buildWPAll(x, y, player);
         });
     }
 
@@ -72,12 +93,25 @@ public class RacingMod extends Plugin{
         return state.rules.tags.getBool("minduracing") && !state.is(State.menu);
     }
 
-    public void buildWP(int x, int y, Player player){
+    //used for first WP
+    public void buildWPAll(int x, int y, Player player){
         Waypoints[] wps = Waypoints.values();
-        for(int dx = 0; x < 2; dx++){
-            for(int dy = 0; y < 2; dy++){
-                Call.onConstructFinish(world.getTiles()[x + dx][y + dy], wps[2*dx+dy].wall, player.id, (byte)0, dead, true);
+        for(int dx = 0; dx < 2; dx++){
+            for(int dy = 0; dy < 2; dy++){
+                Call.onConstructFinish(world.tile(x + dx,y + dy), wps[2*dx+dy].wall, player.id, (byte)0, dead, true);
             }
         }
+    }
+
+    //if player close to wp build next wp
+    public void buildWP(int x, int y, Player player){
+
+    }
+
+    //Tileposition
+    public void setPlayerOnTile(Player p, int x, int y){
+        Call.onPositionSet(p.con, x * Vars.tilesize, y * Vars.tilesize);
+        p.setNet(x * Vars.tilesize, y * Vars.tilesize);
+        p.set(x * Vars.tilesize, y * Vars.tilesize);
     }
 }
