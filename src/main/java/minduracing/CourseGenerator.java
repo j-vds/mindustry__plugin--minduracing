@@ -45,16 +45,19 @@ public class CourseGenerator extends Generator {
             }
         }
 
+        //TODO: load as a class or from a file
+        parts.with(
+                new Corner( 0, height/2, 1),
+                new Straight((int)Math.floor(Corner.outerRadius), height-gap, width - 2*Corner.outerRadius, false),
+                new Corner((int)Math.floor(width - Corner.outerRadius), height/2, 2),
+                new Corner((int)Math.floor(width - Corner.outerRadius), 0, 3),
+                new Straight((int)Math.floor(Corner.outerRadius), 0, width - 2*Corner.outerRadius, false),
+                new Corner(0, 0, 4)
+        );
+
         for (int x = 0; x < width; x++){
             for (int y = 0; y < height; y++){
-                if (Corner.cornerTop(x, y, 0, 0, 4)) tiles[x][y].setBlock(Blocks.air);
-                if (Corner.cornerTop(x, y, 0, height/2, 1)) tiles[x][y].setBlock(Blocks.air);
-                //straights
-                if (Straight.horiz(x, y, (int)Math.floor(Corner.outerRadius), 0, width - 2*Corner.outerRadius)) tiles[x][y].setBlock(Blocks.air);
-                if (Straight.horiz(x, y, (int)Math.floor(Corner.outerRadius), height-gap, width - 2*Corner.outerRadius)) tiles[x][y].setBlock(Blocks.air);
-
-                if (Corner.cornerTop(x, y, (int)Math.floor(width - Corner.outerRadius), height/2, 2)) tiles[x][y].setBlock(Blocks.air);
-                if (Corner.cornerTop(x, y, (int)Math.floor(width - Corner.outerRadius), 0, 3)) tiles[x][y].setBlock(Blocks.air);
+                
             }
         }
 

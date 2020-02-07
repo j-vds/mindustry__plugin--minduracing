@@ -18,6 +18,7 @@ public class Straight extends TrackPart{
         this.pgap = pgap;
     }
 
+    @Override
     public boolean erase(int x, int y){
         if (vertical){
             return verti(x, y, this.pgap);

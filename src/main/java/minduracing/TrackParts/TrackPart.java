@@ -10,6 +10,10 @@ public class TrackPart {
         this.topy = topy;
     }
 
+    public boolean erase(int x, int y){
+        return false;
+    }
+
     public int[] WP(){
         return null;
     }

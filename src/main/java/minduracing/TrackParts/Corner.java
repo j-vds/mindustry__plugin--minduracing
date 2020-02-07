@@ -24,11 +24,11 @@ public class Corner extends TrackPart{
         this.OR = OR;
     }
 
-    public boolean erase(){}
-
-    private static boolean cornerSW(int x, int y, int topx, int topy, int pcase){
-        return cornerSW(x, y, topx, topy, pcase, innerRadius, outerRadius);
+    @Override
+    public boolean erase(int x, int y){
+        return cornerSW(x, y, topx, topy, pcase, IR, OR);
     }
+
     /* True == blank */
     //topx en topy zijn coordinaten van de links onderhoek
     private static boolean cornerSW(int x, int y, int topx, int topy, int pcase, float IR, float OR){
@@ -72,4 +72,10 @@ public class Corner extends TrackPart{
             return false;
         }
     }
+
+    @Override
+    public int[] WP(){
+        int[] ret = {topx + (int)Math.floor(OR/2), topy + (int)Math.floor(OR/2)};
+        return ret;
+    };
 }
