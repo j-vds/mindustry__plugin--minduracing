@@ -20,6 +20,7 @@ import static minduracing.MinduRacing.*;
 public class CourseGenerator extends Generator {
     public Pallete pallete =  Pallete.cavern;
     public int[][] checkpoints;
+
     private Array<TrackPart> parts = new Array<>();
 
 
@@ -55,11 +56,21 @@ public class CourseGenerator extends Generator {
                 new Corner(0, 0, 4)
         );
 
-        for (int x = 0; x < width; x++){
-            for (int y = 0; y < height; y++){
-                
+        checkpoints = new int[parts.size + 1][2];
+
+        for (int i=0; i<parts.size; i++){
+            checkpoints[i] = parts.get(i).WP();
+            for (int x = 0; x < width; x++){
+                for (int y = 0; y < height; y++){
+                //with Array<>().foreach or each method would be better
+                    if (parts.get(i).erase(x, y)){
+                        tiles[x][y].setBlock(Blocks.air);
+                    }
+                }
             }
         }
+
+        checkpoints[parts.size] = getSpawn();
 
         //populate checkpoints for now ~ mittle of a part + star
         //iterate track parts

@@ -82,10 +82,12 @@ public class RacingMod extends Plugin{
 
     @Override
     public void registerClientCommands(CommandHandler handler){
-        handler.<Player>register("wp", "<x> <y>", "place a wp", (args, player) -> {
-            int x = Integer.parseInt(args[0]);
-            int y = Integer.parseInt(args[1]);
-            buildWPAll(x, y, player);
+        handler.<Player>register("wp", "place all wp", (args, player) -> {
+            for (int i=0; i<generator.checkpoints.length - 1; i++){
+                int x = generator.checkpoints[i][0];
+                int y = generator.checkpoints[i][1];
+                generator.buildWP(world.getTiles(), x, y);
+            }
         });
     }
 
